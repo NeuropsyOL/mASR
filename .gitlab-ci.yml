@@ -14,4 +14,4 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - "matlab -nodesktop -nosplash -nodisplay -batch 'version'"
+    - "matlab -nodesktop -nosplash -nodisplay -batch 'cd calibration_simple;make_asr_calibrate_simple'"
