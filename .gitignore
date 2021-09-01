@@ -20,6 +20,7 @@ sccprj/
 
 # Matlab code generation folders
 codegen/
+asr.zip
 
 # Matlab Coder project files
 *.prj
