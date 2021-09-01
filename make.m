@@ -38,6 +38,6 @@ ARGS{2}{3} = coder.typeof(ARGS_2_3);
 ARGS{2}{3} = coder.cstructname(ARGS{2}{3},'asr_state_t');
 
 %% Invoke MATLAB Coder.
-codegen -config cfg asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
+codegen -config cfg -o asr asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
 buildInfo=load('codegen/lib/asr/buildInfo.mat');
 packNGo(buildInfo.buildInfo,'fileName','asr.zip');
