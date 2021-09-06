@@ -12,8 +12,8 @@ cfg.GenerateReport = true;
 cfg.ReportPotentialDifferences = false;
 cfg.SaturateOnIntegerOverflow = false;
 cfg.GenCodeOnly = true;
-cfg.TargetLangStandard = 'C++03 (ISO)';
-
+cfg.TargetLangStandard = 'C++11 (ISO)';
+cfg.EnableOpenMP = false;
 %% Define argument types for entry-point 'asr_calibrate_simple'.
 ARGS = cell(2,1);
 ARGS{1} = cell(2,1);
@@ -38,6 +38,5 @@ ARGS{2}{3} = coder.typeof(ARGS_2_3);
 ARGS{2}{3} = coder.cstructname(ARGS{2}{3},'asr_state_t');
 
 %% Invoke MATLAB Coder.
-codegen -config cfg -o asr asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
-buildInfo=load('codegen/lib/asr/buildInfo.mat');
-packNGo(buildInfo.buildInfo,'fileName','asr.zip');
+codegen -config cfg -o asr -package asr.zip asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
+
