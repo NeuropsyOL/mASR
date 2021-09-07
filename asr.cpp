@@ -2,7 +2,6 @@
 #include "asr_calibrate_simple.h"
 #include "asr_process_simple.h"
 #include "asr_terminate.h"
-#include "rt_nonfinite.h"
 // Function Declarations
 static coder::array<double, 2U> argInit_1xUnbounded_real_T();
 static coder::array<double, 2U> argInit_UnboundedxUnbounded_real_T();
