@@ -1,25 +1,29 @@
 # This file is part of the asr project
 
-include /usr/local/share/openmha/config.mk
+include /usr/share/openmha/config.mk
 
 # Include openmha headers
-INCLUDES=-I/usr/local/include/openmha
+INCLUDES=-I/usr/include/openmha
 
 # Link against libopenmha
 LIBS=-lopenmha
 
 # Sources
-SOURCES=$(wildcard *.cpp)
+SOURCES=$(wildcard codegen/*.cpp)
 
 # Default target is example21
-all: asr
+all: asr codegen
 
 # Convenience target: Remove compiled products
 clean:
 	rm -rf codegen asr$(DYNAMIC_LIB_EXT)
 
-asr: $(patsubst benchmark.cpp,,$(SOURCES))
-	$(CXX) -shared -o asr$(DYNAMIC_LIB_EXT) $(CXXFLAGS) -Wno-deprecated-copy $(INCLUDES) $(LIBS) $^
+asr.zip: asr_calibrate_simple.m asr_process_simple.m make.m
+	matlab -batch 'make'
+	unzip -d codegen asr.zip
 
-benchmark: $(patsubst asr.cpp,,$(SOURCES))
-	$(CXX) -o benchmark $(CXXFLAGS) -Wno-error -Wno-deprecated-copy $(INCLUDES) $(LDLIBS) -lbenchmark $^
+asr: asr.cpp asr.zip
+	$(CXX) -shared -o asr$(DYNAMIC_LIB_EXT) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen $(INCLUDES) $(LIBS) $< $(SOURCES)
+
+benchmark: benchmark.cpp asr.zip
+	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -lbenchmark -lpthread -o benchmark
