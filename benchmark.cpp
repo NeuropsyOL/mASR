@@ -101,7 +101,7 @@ static double argInit_real_T()
 
 static void BM_asr_calibrate_simple(benchmark::State& state) {
 
-  auto X = argInit_UnboundedxUnbounded_real_T();
+  auto X = argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   auto M = argInit_UnboundedxUnbounded_real_T();
   auto T = argInit_UnboundedxUnbounded_real_T();
   double B[9];
@@ -115,21 +115,38 @@ static void BM_asr_calibrate_simple(benchmark::State& state) {
 }
 
 static void BM_asr_process_simple(benchmark::State& state) {
+  auto X = argInit_UnboundedxUnbounded_real_T();
+  auto M = argInit_UnboundedxUnbounded_real_T();
+  auto T = argInit_UnboundedxUnbounded_real_T();
+  double B[9];
+  double A[9];
+  auto iirstate = argInit_UnboundedxUnbounded_real_T();
+  asr_calibrate_simple(X, 100, M,T,B,A,iirstate);
   // Perform setup here
   asr_state_t instate;
   asr_state_t outstate;
   coder::array<double, 2U> indata;
   coder::array<double, 2U> outdata;
-  indata=argInit_UnboundedxUnbounded_real_T(20,50);
-  outdata=argInit_UnboundedxUnbounded_real_T();
+  indata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
+  outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   argInit_asr_state_t(&instate);
+  instate.M=M;
+  instate.T=T;
+  int idx=0;
+  for(auto &elm:instate.B)
+	elm=B[idx++];
+idx=0;
+for(auto & elm:instate.A)
+elm=A[idx++];
+  instate.iir=iirstate;
   argInit_asr_state_t(&outstate);
   for (auto _ : state) {
     // This code gets timed
     asr_process_simple(indata, 100, &instate, outdata, &outstate);
   }
 }
-// Register the function as a benchmark
-BENCHMARK(BM_SomeFunction);
+//Register the function as a benchmark, use milliseconds as time unit
+BENCHMARK(BM_asr_calibrate_simple)->Unit(benchmark::kMillisecond)->RangeMultiplier(10)->Range(1e3,1e6);
+BENCHMARK(BM_asr_process_simple)->Unit(benchmark::kMillisecond)->RangeMultiplier(10)->Range(1e1,1e6);
 // Run the benchmark
 BENCHMARK_MAIN();
