@@ -1,3 +1,9 @@
+# Binaries
+asr.so
+asr.dylib
+asr.dll
+benchmark
+
 # Windows default autosave extension
 *.asv
 
