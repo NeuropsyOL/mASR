@@ -42,3 +42,6 @@ octave-workspace
 
 # OSX filesystem stuff
 .DS_Store
+
+# OSX Debug information
+*.dSYM
