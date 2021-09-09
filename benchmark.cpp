@@ -2,6 +2,7 @@
 #include "asr_calibrate_simple.h"
 #include "asr_process_simple.h"
 #include "asr_terminate.h"
+#include <random>
 // Function Declarations
 static coder::array<double, 2U> argInit_1xUnbounded_real_T();
 static coder::array<double, 2U> argInit_UnboundedxUnbounded_real_T(unsigned,unsigned);
@@ -50,7 +51,7 @@ static coder::array<double, 2U> argInit_UnboundedxUnbounded_real_T(unsigned N=20
     for (int idx1 = 0; idx1 < result.size(1); idx1++) {
       // Set the value of the array element.
       // Change this value to the value that the application requires.
-      result[idx0 + result.size(0) * idx1] = (float)rand()/(float)RAND_MAX;
+      result[idx0 + result.size(0) * idx1] = argInit_real_T();
     }
   }
 
@@ -94,9 +95,12 @@ static boolean_T argInit_boolean_T()
 // Arguments    : void
 // Return Type  : double
 //
+static std::random_device rd{};
+static std::mt19937 gen{rd()};
+static std::normal_distribution<> d{0,1};
 static double argInit_real_T()
 {
-  return 0.0;
+  return d(gen);
 }
 
 static void BM_asr_calibrate_simple(benchmark::State& state) {
@@ -125,24 +129,28 @@ static void BM_asr_process_simple(benchmark::State& state) {
   // Perform setup here
   asr_state_t instate;
   asr_state_t outstate;
-  coder::array<double, 2U> indata;
+  coder::array<double, 2U> indata[100];
   coder::array<double, 2U> outdata;
-  indata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
+  for(int i=0;i<100;i++)
+    indata[i]=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   argInit_asr_state_t(&instate);
   instate.M=M;
   instate.T=T;
   int idx=0;
   for(auto &elm:instate.B)
-	elm=B[idx++];
-idx=0;
-for(auto & elm:instate.A)
-elm=A[idx++];
+    elm=B[idx++];
+  idx=0;
+  for(auto & elm:instate.A)
+    elm=A[idx++];
   instate.iir=iirstate;
+  unsigned k=0U;
   argInit_asr_state_t(&outstate);
+  (void)k;
   for (auto _ : state) {
     // This code gets timed
-    asr_process_simple(indata, 100, &instate, outdata, &outstate);
+    asr_process_simple(indata[k++ % 100], 100, &instate, outdata, &outstate);
+    instate=outstate;
   }
 }
 //Register the function as a benchmark, use milliseconds as time unit
