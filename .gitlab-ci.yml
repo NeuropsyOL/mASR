@@ -30,7 +30,7 @@ build-job:
   dependencies:
     - codegen-job
   script:
-    - "unzip -f -d codegen asr.zip" 
+    - "unzip -o -d codegen asr.zip" 
     - "make asr"
 
 benchmark-job:
@@ -38,6 +38,6 @@ benchmark-job:
     - pi
   stage: benchmark
   script:
-    - "unzip -f -d codegen asr.zip"
+    - "unzip -o asr.zip -d codegen"
     - "make benchmark"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
