@@ -18,7 +18,7 @@ codegen-job:
     - matlab
   stage: codegen
   script:
-    - "make codegen"
+    - "make asr.zip"
   artifacts:
     paths:
       - asr.zip
