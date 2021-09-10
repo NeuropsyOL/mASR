@@ -20,7 +20,8 @@ codegen-job:
   script:
     - "make codegen"
   artifacts:
-    - asr.zip
+    paths:
+      - asr.zip
 
 build-job:
   tags:
