@@ -24,7 +24,8 @@ build-job:
   tags:
     - pi
   stage: build
-  dependencies: asr.zip
+  dependencies:
+    - codegen
   script:
     - "make asr"
 
