@@ -19,13 +19,15 @@ codegen-job:
   stage: codegen
   script:
     - "make codegen"
+  artifacts:
+    - asr.zip
 
 build-job:
   tags:
     - pi
   stage: build
   dependencies:
-    - codegen
+    - codegen-job
   script:
     - "make asr"
 
