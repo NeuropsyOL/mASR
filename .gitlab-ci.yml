@@ -36,5 +36,3 @@ benchmark-job:
   script:
     - "make benchmark"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
-  artifacts:
-    - benchmark.log
