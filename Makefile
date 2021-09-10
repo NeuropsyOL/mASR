@@ -12,7 +12,7 @@ LIBS=-lopenmha
 SOURCES=$(wildcard codegen/*.cpp)
 
 # Default target is example21
-all: asr codegen
+all: asr asr.zip
 
 # Convenience target: Remove compiled products
 clean:
