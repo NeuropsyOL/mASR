@@ -30,7 +30,6 @@ clean:
 asr.zip: asr_calibrate_simple.m asr_process_simple.m make.m
 	matlab -batch 'make'
 
-
 codegen/.directory: asr.zip
 	unzip -d codegen asr.zip
 	touch codegen/.directory
@@ -38,8 +37,8 @@ codegen/.directory: asr.zip
 asr$(DYNAMIC_LIB_EXT): asr.cpp codegen/.directory
 	$(CXX) -shared -o asr$(DYNAMIC_LIB_EXT) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen $(INCLUDES) $(LIBS) $< $(SOURCES)
 
-	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -lbenchmark -lpthread -o benchmark
 benchmark: benchmark.cpp codegen/.directory
+	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
 
 deb: asr$(DYNAMIC_LIB_EXT)
 	touch asr_$(VERSION)-1_$(ARCH).deb
