@@ -11,7 +11,13 @@ LIBS=-lopenmha
 # Sources
 SOURCES=$(wildcard codegen/*.cpp)
 
-# Default target is example21
+# Version for packaging
+VERSION=$(shell git rev-list --count HEAD)
+
+# Arch for packaging
+ARCH=$(shell uname -m)
+
+# Default target
 all: asr$(DYNAMIC_LIB_EXT) asr.zip
 
 # Convenience target: Remove compiled products
@@ -29,4 +35,4 @@ benchmark: benchmark.cpp asr.zip
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -lbenchmark -lpthread -o benchmark
 
 deb: asr$(DYNAMIC_LIB_EXT)
-	touch asr.deb
+	touch asr_$(VERSION)-1_$(ARCH).deb

@@ -28,9 +28,9 @@ build-job:
     paths:
       - asr.so
 
-
 package-job:
-  tags: linux
+  tags:
+    - linux
   stage: package
   dependencies:
     - build-job
