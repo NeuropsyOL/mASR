@@ -24,7 +24,7 @@ build-job:
   script:
     - "unzip -o -d codegen asr.zip"
     - "touch codegen/.directory" 
-    - "make asr"
+    - "make"
   artifacts:
     paths:
       - asr.so

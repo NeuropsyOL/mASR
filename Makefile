@@ -18,10 +18,7 @@ VERSION=$(shell git rev-list --count HEAD)
 ARCH=$(shell uname -m)
 
 # Default target
-all: asr$(DYNAMIC_LIB_EXT) asr.zip
-
-# Redirect asr to proper target
-asr: asr$(DYNAMIC_LIB_EXT)
+all: asr$(DYNAMIC_LIB_EXT)
 
 # Convenience target: Remove compiled products
 clean:
