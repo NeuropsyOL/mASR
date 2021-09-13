@@ -12,7 +12,7 @@ LIBS=-lopenmha
 SOURCES=$(wildcard codegen/*.cpp)
 
 # Default target is example21
-all: asr asr.zip
+all: asr$(DYNAMIC_LIB_EXT) asr.zip
 
 # Convenience target: Remove compiled products
 clean:
@@ -22,8 +22,11 @@ asr.zip: asr_calibrate_simple.m asr_process_simple.m make.m
 	matlab -batch 'make'
 	unzip -d codegen asr.zip
 
-asr: asr.cpp asr.zip
+asr$(DYNAMIC_LIB_EXT): asr.cpp asr.zip
 	$(CXX) -shared -o asr$(DYNAMIC_LIB_EXT) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen $(INCLUDES) $(LIBS) $< $(SOURCES)
 
 benchmark: benchmark.cpp asr.zip
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -lbenchmark -lpthread -o benchmark
+
+deb: asr$(DYNAMIC_LIB_EXT)
+	touch asr.deb
