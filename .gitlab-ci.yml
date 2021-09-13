@@ -22,7 +22,8 @@ build-job:
   dependencies:
     - codegen-job
   script:
-    - "unzip -o -d codegen asr.zip" 
+    - "unzip -o -d codegen asr.zip"
+    - "touch codegen/.directory" 
     - "make asr"
   artifacts:
     paths:
@@ -43,5 +44,6 @@ benchmark-job:
   stage: benchmark
   script:
     - "unzip -o asr.zip -d codegen"
+    - "touch codegen/.directory"
     - "make benchmark"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
