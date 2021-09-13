@@ -1,4 +1,4 @@
-#include "mha_plugin.hh"
+#include <openmha/mha_plugin.hh>
 #include "asr_calibrate_simple.h"
 #include "asr_process_simple.h"
 #include "asr_terminate.h"
