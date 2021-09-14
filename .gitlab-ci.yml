@@ -45,6 +45,7 @@ benchmark-job:
   script:
     - "unzip -o asr.zip -d codegen"
     - "touch codegen/.directory"
+    - "g++ --version"
     - "make benchmark"
     - "ulimit -c unlimited"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
