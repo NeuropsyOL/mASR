@@ -149,7 +149,8 @@ static void BM_asr_process_simple(benchmark::State& state) {
   (void)k;
   for (auto _ : state) {
     // This code gets timed
-    asr_process_simple(indata[k++ % 100], 100, &instate, outdata, &outstate);
+    int idx=k++ % 100;
+    asr_process_simple(indata[idx], 100, &instate, outdata, &outstate);
     instate=outstate;
   }
 }
