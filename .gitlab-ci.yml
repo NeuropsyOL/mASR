@@ -29,9 +29,9 @@ build-job:
     paths:
       - asr.so
 
-package-job:
+package-x86-job:
   tags:
-    - linux
+    - x86
   stage: package
   dependencies:
     - build-job
@@ -39,9 +39,9 @@ package-job:
     - "ls -l"
     - "make deb"
 
-package-pi-job:
+package-arm-job:
   tags:
-    - pi
+    - arm
   stage: package
   dependencies:
     - build-job
