@@ -3,6 +3,7 @@ stages:
   - codegen
   - build
   - benchmark
+#  - package
 
 codegen-job:
   tags:
@@ -28,25 +29,25 @@ build-job:
     paths:
       - asr.so
 
-package-x86-job:
-  tags:
-    - x86
-  stage: package
-  dependencies:
-    - build-job
-  script:
-    - "ls -l"
-    - "make deb"
+#package-x86-job:
+#  tags:
+#    - x86
+#  stage: package
+#  dependencies:
+#    - build-job
+#  script:
+#    - "ls -l"
+#    - "make deb"
 
-package-arm-job:
-  tags:
-    - arm
-  stage: package
-  dependencies:
-    - build-job
-  script:
-    - "ls -l"
-    - "make deb"
+#package-arm-job:
+#  tags:
+#    - arm
+#  stage: package
+#  dependencies:
+#    - build-job
+#  script:
+#    - "ls -l"
+#    - "make deb"
 
 
 benchmark-job:
