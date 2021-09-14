@@ -11,11 +11,22 @@ LIBS=-lopenmha
 # Sources
 SOURCES=$(wildcard codegen/*.cpp)
 
+# Use mha version number the plugin is linked against
+MHAVERSION=$(shell mha --help | grep version | sed 's/.* version \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/g')
+
 # Version for packaging
-VERSION=$(shell git rev-list --count HEAD)
+REVISION=$(shell git rev-list --count HEAD)
 
 # Arch for packaging
 ARCH=$(shell uname -m)
+
+# FULLVERSIONALL is the package version plus git age plus git hash plus any
+# modification indicator but without the compiler version.
+FULLVERSIONALL=$(MHAVERSION)-$(REVISION)-$(COMMITHASH)$(GITMODIFIED)
+export FULLVERSIONALL
+
+# FULLVERSIONGCC is FULLVERSIONALL plus the compiler version
+FULLVERSIONGCC=$(FULLVERSIONALL)-gcc$(GCC_VER)
 
 # Default target
 all: asr$(DYNAMIC_LIB_EXT)
@@ -38,4 +49,4 @@ benchmark: benchmark.cpp codegen/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
 
 deb: asr$(DYNAMIC_LIB_EXT)
-	touch asr_$(VERSION)-1_$(ARCH).deb
+	mhamakedeb asr.csv $(FULLVERSIONGCC)
