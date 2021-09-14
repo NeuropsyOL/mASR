@@ -3,7 +3,6 @@ stages:
   - codegen
   - build
   - benchmark
-  - package
 
 codegen-job:
   tags:
