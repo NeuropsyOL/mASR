@@ -155,7 +155,7 @@ static void BM_asr_process_simple(benchmark::State& state) {
   }
 }
 //Register the function as a benchmark, use milliseconds as time unit
-BENCHMARK(BM_asr_calibrate_simple)->Unit(benchmark::kMillisecond)->Range(1e3,1e4);
-BENCHMARK(BM_asr_process_simple)->Unit(benchmark::kMillisecond)->DenseRange(1e2,1e3,100);
+BENCHMARK(BM_asr_calibrate_simple)->Unit(benchmark::kMillisecond)->Range(100,200);
+BENCHMARK(BM_asr_process_simple)->Unit(benchmark::kMillisecond)->DenseRange(1e2,200,100);
 // Run the benchmark
 BENCHMARK_MAIN();
