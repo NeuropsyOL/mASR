@@ -38,7 +38,18 @@ package-job:
   script:
     - "ls -l"
     - "make deb"
-    
+
+package-pi-job:
+  tags:
+    - pi
+  stage: package
+  dependencies:
+    - build-job
+  script:
+    - "ls -l"
+    - "make deb"
+
+
 benchmark-job:
   tags:
     - pi
