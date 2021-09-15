@@ -49,5 +49,5 @@ benchmark: benchmark.cpp codegen/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
 
 deb:
-	test -e $(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
+	test -e asr$(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
 	mhamakedeb asr.csv $(FULLVERSIONGCC)
