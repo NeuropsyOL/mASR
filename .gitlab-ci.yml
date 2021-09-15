@@ -36,8 +36,10 @@ package-x86-job:
   dependencies:
     - build-job
   script:
-    - "ls -l"
     - "make deb"
+  artifacts:
+    paths:
+      - "asr_*_*.deb"
 
 package-arm-job:
   tags:
@@ -46,8 +48,10 @@ package-arm-job:
   dependencies:
     - build-job
   script:
-    - "ls -l"
     - "make deb"
+  artifacts:
+    paths:
+      - "asr_*_*.deb"
 
 benchmark-job:
   tags:
@@ -56,7 +60,6 @@ benchmark-job:
   script:
     - "unzip -o asr.zip -d codegen"
     - "touch codegen/.directory"
-    - "g++ --version"
     - "make benchmark"
     - "ulimit -c unlimited"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
