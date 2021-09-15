@@ -20,6 +20,15 @@ REVISION=$(shell git rev-list --count HEAD)
 # Arch for packaging
 ARCH=$(shell uname -m)
 
+# If the git repository contains any non-committed modifications, then
+# GITMODIFIED is set to "-modified", else it is empty.  GITMODIFIED is used
+# as part of the debian package version to easily spot non-reproducible debs
+GITMODIFIED=$(shell test -z "git status --porcelain -uno`" || echo "-modified")
+
+# Part of the git commit SHA1 is stored in COMMITHASH and becomes part of the
+# debian package version
+COMMITHASH=$(shell git log -1 --abbrev=7 --pretty='format:%h')
+
 # FULLVERSIONALL is the package version plus git age plus git hash plus any
 # modification indicator but without the compiler version.
 FULLVERSIONALL=$(MHAVERSION)-$(REVISION)-$(COMMITHASH)$(GITMODIFIED)
