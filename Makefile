@@ -48,5 +48,6 @@ asr$(DYNAMIC_LIB_EXT): asr.cpp codegen/.directory
 benchmark: benchmark.cpp codegen/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
 
-deb: | asr$(DYNAMIC_LIB_EXT)
+deb:
+	test -e $(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
 	mhamakedeb asr.csv $(FULLVERSIONGCC)
