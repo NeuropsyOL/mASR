@@ -1,7 +1,7 @@
-% MAKE   Generate static library asr_calibrate_simple from asr_calibrate_simple,
+% MAKE   Generate static library asr from asr_calibrate_simple,
 %  asr_process_simple.
 % 
-% Script generated from project 'asr.prj' on 24-Aug-2021.
+% Script generated from project 'asr.prj' on 16-Sep-2021.
 % 
 % See also CODER, CODER.CONFIG, CODER.TYPEOF, CODEGEN.
 
@@ -11,9 +11,13 @@ cfg.TargetLang = 'C++';
 cfg.GenerateReport = true;
 cfg.ReportPotentialDifferences = false;
 cfg.SaturateOnIntegerOverflow = false;
+cfg.EnableAutoParallelization = true;
+cfg.RowMajor = true;
+cfg.EnableOpenMP = false;
 cfg.GenCodeOnly = true;
 cfg.TargetLangStandard = 'C++11 (ISO)';
-cfg.EnableOpenMP = false;
+cfg.MaxIdLength = 1024;
+
 %% Define argument types for entry-point 'asr_calibrate_simple'.
 ARGS = cell(2,1);
 ARGS{1} = cell(2,1);
@@ -38,5 +42,5 @@ ARGS{2}{3} = coder.typeof(ARGS_2_3);
 ARGS{2}{3} = coder.cstructname(ARGS{2}{3},'asr_state_t');
 
 %% Invoke MATLAB Coder.
-codegen -config cfg -o asr -package asr.zip asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
+codegen -config cfg -o asr asr_calibrate_simple -args ARGS{1} asr_process_simple -args ARGS{2}
 
