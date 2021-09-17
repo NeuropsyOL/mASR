@@ -12,7 +12,6 @@ cfg.GenerateReport = true;
 cfg.ReportPotentialDifferences = false;
 cfg.SaturateOnIntegerOverflow = false;
 cfg.EnableAutoParallelization = true;
-cfg.RowMajor = true;
 cfg.EnableOpenMP = true;
 cfg.GenCodeOnly = true;
 cfg.TargetLangStandard = 'C++11 (ISO)';
