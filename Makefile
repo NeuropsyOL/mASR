@@ -38,7 +38,7 @@ export FULLVERSIONALL
 FULLVERSIONGCC=$(FULLVERSIONALL)-gcc$(GCC_VER)
 
 # We need openMP
-CXXFLAGS+=-fopenmp
+#CXXFLAGS+=-fopenmp
 
 # Default target
 all: asr$(DYNAMIC_LIB_EXT)
