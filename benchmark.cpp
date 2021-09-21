@@ -129,9 +129,9 @@ static void BM_asr_process_simple(benchmark::State& state) {
   // Perform setup here
   asr_state_t instate;
   asr_state_t outstate;
-  coder::array<double, 2U> indata[100];
+  coder::array<double, 2U> indata[2000];
   coder::array<double, 2U> outdata;
-  for(int i=0;i<100;i++)
+  for(int i=0;i<2000;i++)
     indata[i]=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
   argInit_asr_state_t(&instate);
@@ -149,13 +149,12 @@ static void BM_asr_process_simple(benchmark::State& state) {
   (void)k;
   for (auto _ : state) {
     // This code gets timed
-    int idx=k++ % 100;
-    asr_process_simple(indata[idx], 100, &instate, outdata, &outstate);
+    asr_process_simple(indata[k++ % 2000], 100, &instate, outdata, &outstate);
     instate=outstate;
   }
 }
 //Register the function as a benchmark, use milliseconds as time unit
-BENCHMARK(BM_asr_calibrate_simple)->Unit(benchmark::kMillisecond)->Range(100,200);
 BENCHMARK(BM_asr_process_simple)->Unit(benchmark::kMillisecond)->DenseRange(1e2,200,100);
+BENCHMARK(BM_asr_calibrate_simple)->Unit(benchmark::kMillisecond)->Range(10000,50000);
 // Run the benchmark
 BENCHMARK_MAIN();
