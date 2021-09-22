@@ -25,12 +25,12 @@ static coder::array<double, 2U> argInit_1xUnbounded_real_T(unsigned M=10,std::op
 
   // Loop over the array to initialize each element.
   for (int idx0 = 0; idx0 < 1; idx0++) {
-    for (int idx1 = 0; idx1 < result.size(1); idx1++) {
-        if(val)
-            result[idx1] = *val;
-        else
-            result[idx1] = argInit_real_T();
-    }
+      for (int idx1 = 0; idx1 < result.size(1); idx1++) {
+          if(val)
+              result[idx1] = *val;
+          else
+              result[idx1] = argInit_real_T();
+      }
   }
   return result;
 }
@@ -49,14 +49,14 @@ static coder::array<double, 2U> argInit_UnboundedxUnbounded_real_T(unsigned N=20
 
   // Loop over the array to initialize each element.
   for (int idx0 = 0; idx0 < result.size(0); idx0++) {
-    for (int idx1 = 0; idx1 < result.size(1); idx1++) {
-      // Set the value of the array element.
-      // Change this value to the value that the application requires.
-      if(val)
-        result[idx0 + result.size(0) * idx1] = *val;
-      else
-        result[idx0 + result.size(0) * idx1] = argInit_real_T();
-    }
+      for (int idx1 = 0; idx1 < result.size(1); idx1++) {
+          // Set the value of the array element.
+          // Change this value to the value that the application requires.
+          if(val)
+              result[idx0 + result.size(0) * idx1] = *val;
+          else
+              result[idx0 + result.size(0) * idx1] = argInit_real_T();
+      }
   }
 
   return result;
@@ -142,15 +142,11 @@ public:
       }
 
       // Prepare fake indata
-      for(int i=0;i<2000;i++)
-          indata[i]=argInit_UnboundedxUnbounded_real_T(20,50);
+      indata=argInit_UnboundedxUnbounded_real_T(20,50);
 
       // Initialize outdata to zero
       outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
-      for(int i=0;i<2000;i++)
-          indata[i]=argInit_UnboundedxUnbounded_real_T(20,50);
       argInit_asr_state_t(&outstate);
-
   }
 
 
@@ -158,7 +154,12 @@ public:
     {
         auto tic = std::chrono::system_clock::now().time_since_epoch();
         //TODO get real data from somewhere, preferably LSL, maybe via lsl2ac plugin
-        asr_process_simple(indata[k++ % 2000], 100, &instate, outdata, &outstate);
+        for (int idx0 = 0; idx0 < indata.size(0); idx0++) {
+            for (int idx1 = 0; idx1 < indata.size(1); idx1++) {
+                indata[idx0 + indata.size(0) * idx1] = argInit_real_T();
+            }
+        }
+        asr_process_simple(indata, 100, &instate, outdata, &outstate);
         auto toc = std::chrono::system_clock::now().time_since_epoch();
         dt+=std::chrono::duration_cast<std::chrono::microseconds>(toc).count()-std::chrono::duration_cast<std::chrono::microseconds>(tic).count();
         instate=outstate;
@@ -173,9 +174,8 @@ public:
 private:
     asr_state_t instate;
     asr_state_t outstate;
-    coder::array<double, 2U> indata[2000];
+    coder::array<double, 2U> indata;
     coder::array<double, 2U> outdata;
-    unsigned long k=0;
     std::size_t nproc=0;
     unsigned dt;
 
