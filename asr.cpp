@@ -112,9 +112,7 @@ public:
 
   /** Release may be empty */
   void release(void)
-    {asr_terminate();
-        std::cout<<nproc<<"\n";
-    }
+    {asr_terminate();}
 
 
 
@@ -156,17 +154,28 @@ public:
         // code appends to indata on every call
         indata=argInit_UnboundedxUnbounded_real_T(20,50);
         outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
+        auto tic=std::chrono::high_resolution_clock::now().time_since_epoch();
         asr_process_simple(indata, 100, &instate, outdata, &outstate);
+        auto toc=std::chrono::high_resolution_clock::now().time_since_epoch();
+        dt+=std::chrono::duration_cast<std::chrono::microseconds>(toc).count()-
+            std::chrono::duration_cast<std::chrono::microseconds>(tic).count();
+        if(nproc % 1000 == 0 && nproc > 0){
+            std::cerr<<nproc<<" "<<dt/1000<<"us\n";
+            dt=0;
+        }
+        nproc++;
         return signal;
     }
 
 private:
+    unsigned nproc=0;
+    unsigned dt=0;
     asr_state_t instate;
     asr_state_t outstate;
     coder::array<double, 2U> indata;
     coder::array<double, 2U> outdata;
-    std::size_t nproc=0;
-    unsigned dt;
+    //std::size_t nproc=0;
+    //unsigned dt;
 
 };
 
