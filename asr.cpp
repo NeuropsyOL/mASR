@@ -152,22 +152,11 @@ public:
 
     mha_wave_t * process(mha_wave_t * signal)
     {
-        auto tic = std::chrono::system_clock::now().time_since_epoch();
-        //TODO get real data from somewhere, preferably LSL, maybe via lsl2ac plugin
-        for (int idx0 = 0; idx0 < indata.size(0); idx0++) {
-            for (int idx1 = 0; idx1 < indata.size(1); idx1++) {
-                indata[idx0 + indata.size(0) * idx1] = argInit_real_T();
-            }
-        }
-        asr_process_simple(indata, 100, &instate, outdata, &outstate);
-        auto toc = std::chrono::system_clock::now().time_since_epoch();
-        dt+=std::chrono::duration_cast<std::chrono::microseconds>(toc).count()-std::chrono::duration_cast<std::chrono::microseconds>(tic).count();
-        instate=outstate;
-        nproc++;
-        if(nproc % 100 == 0){
-            std::cerr<<nproc<<" "<<dt/100<<"us"<<"\n";
-            dt=0;
-        }
+        // Need to re-initialize every time, for some reason the generated
+        // code appends to indata on every call
+        indata=argInit_UnboundedxUnbounded_real_T(20,50);
+        outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
+        asr_process_simple(indata[k++ % 2000], 100, &instate, outdata, &outstate);
         return signal;
     }
 
