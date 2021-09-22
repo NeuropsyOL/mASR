@@ -63,3 +63,7 @@ benchmark-job:
     - "make benchmark"
     - "ulimit -c unlimited"
     - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
+  artifacts:
+    paths:
+      - "benchmark.log"
+      - "benchmark"
