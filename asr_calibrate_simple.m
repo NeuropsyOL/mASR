@@ -32,7 +32,7 @@ mu = zeros(1,C);
 sig = zeros(1,C);
 
 % apply the signal shaping filter and initialize the IIR filter state
-[X,iirstate] = filter(B,A,double(X),[],2)
+[X,iirstate] = filter(B,A,double(X),[],2);
 X = X';
 
 % calculate the sample covariance matrices U (averaged in blocks of blocksize successive samples)
