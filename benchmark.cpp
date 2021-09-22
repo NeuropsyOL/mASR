@@ -142,9 +142,9 @@ static void BM_asr_process_simple(benchmark::State& state) {
   for (auto _ : state) {
     // Need to re-initialize every time, for some reason the generated
     // code appends to indata on every call
-    indata=argInit_UnboundedxUnbounded_real_T(20,50);
-    outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
-    asr_process_simple(indata[k++ % 2000], 100, &instate, outdata, &outstate);
+    indata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
+    outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0),0);
+    asr_process_simple(indata, 100, &instate, outdata, &outstate);
   }
 }
 //Register the function as a benchmark, use milliseconds as time unit
