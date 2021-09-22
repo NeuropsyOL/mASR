@@ -132,7 +132,7 @@ public:
 
       argInit_asr_state_t(&instate);
       auto iirstate = argInit_UnboundedxUnbounded_real_T(8,20,0);
-      asr_calibrate_simple(X, 100, M,T,B,A,instate.iirstate);
+      asr_calibrate_simple(X, 100, M,T,B,A,instate.iir);
       // Copy calibration to initial instate
       instate.M=M;
       instate.T=T;
@@ -169,7 +169,7 @@ public:
         }
         return signal;
     }
-    
+
 private:
     asr_state_t instate;
     asr_state_t outstate;
