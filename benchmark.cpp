@@ -136,20 +136,15 @@ static void BM_asr_process_simple(benchmark::State& state) {
   }
   asr_state_t outstate;
   argInit_asr_state_t(&outstate);
-  coder::array<double, 2U> indata[2000];
-  // Initialize indata with random values
-  for(int i=0;i<2000;i++)
-    indata[i]=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
-
-  // Initialize outdata to zero
+  coder::array<double, 2U> indata;
   coder::array<double, 2U> outdata;
-  outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0),0);
 
-  unsigned k=0U;
   for (auto _ : state) {
-    // This code gets timed
+    // Need to re-initialize every time, for some reason the generated
+    // code appends to indata on every call
+    indata=argInit_UnboundedxUnbounded_real_T(20,50);
+    outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
     asr_process_simple(indata[k++ % 2000], 100, &instate, outdata, &outstate);
-    instate=outstate;
   }
 }
 //Register the function as a benchmark, use milliseconds as time unit
