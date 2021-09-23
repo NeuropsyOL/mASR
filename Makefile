@@ -23,7 +23,7 @@ ARCH=$(shell uname -m)
 # If the git repository contains any non-committed modifications, then
 # GITMODIFIED is set to "-modified", else it is empty.  GITMODIFIED is used
 # as part of the debian package version to easily spot non-reproducible debs
-GITMODIFIED=$(shell test -z `"git status --porcelain -uno"` || echo "-modified")
+GITMODIFIED=$(shell test -z $(git status --porcelain -uno) || echo "-modified")
 
 # Part of the git commit SHA1 is stored in COMMITHASH and becomes part of the
 # debian package version
