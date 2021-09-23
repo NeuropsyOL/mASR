@@ -138,12 +138,14 @@ static void BM_asr_process_simple(benchmark::State& state) {
   argInit_asr_state_t(&outstate);
   coder::array<double, 2U> indata;
   coder::array<double, 2U> outdata;
+  indata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
+  outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0),0);
 
   for (auto _ : state) {
-    // Need to re-initialize every time, for some reason the generated
+    // Need to reset size every time, for some reason the generated
     // code appends to indata on every call
-    indata=argInit_UnboundedxUnbounded_real_T(20,state.range(0));
-    outdata=argInit_UnboundedxUnbounded_real_T(20,state.range(0),0);
+    indata.set_size(20,state.range(0));
+    outdata.set_size(20,state.range(0));
     asr_process_simple(indata, 100, &instate, outdata, &outstate);
   }
 }

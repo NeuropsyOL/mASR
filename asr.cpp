@@ -150,10 +150,12 @@ public:
 
     mha_wave_t * process(mha_wave_t * signal)
     {
-        // Need to re-initialize every time, for some reason the generated
+
+        // Need to reset size every time, for some reason the generated
         // code appends to indata on every call
-        indata=argInit_UnboundedxUnbounded_real_T(20,50);
-        outdata=argInit_UnboundedxUnbounded_real_T(20,50,0);
+        indata.set_size(20,50);
+        outdata.set_size(20,50);
+
         auto tic=std::chrono::high_resolution_clock::now().time_since_epoch();
         asr_process_simple(indata, 100, &instate, outdata, &outstate);
         auto toc=std::chrono::high_resolution_clock::now().time_since_epoch();
