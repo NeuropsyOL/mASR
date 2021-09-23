@@ -117,13 +117,8 @@ end
 % carry the look-ahead portion of the data over to the state (for successive calls)
 state.carry = [state.carry data(:,(end-P+1):end)];
 state.carry = state.carry(:,(end-P+1):end);
-
 % finalize outputs
 outdata = data(:,1:(end-P));
-if usegpu
-    state.iir = gather(state.iir);
-    state.cov = gather(state.cov);
-end
 outstate = state;
 
 
