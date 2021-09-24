@@ -76,10 +76,10 @@ static void argInit_asr_state_t(asr_state_t *result)
   result->T = argInit_UnboundedxUnbounded_real_T(20,20,0);
   result->B=argInit_1xUnbounded_real_T(9,0);
   result->A=argInit_1xUnbounded_real_T(9,0);
-  result->cov = argInit_1xUnbounded_real_T(1,0);
-  result->carry = argInit_1xUnbounded_real_T(1,0);
+  result->cov = argInit_1xUnbounded_real_T(0,0);
+  result->carry = argInit_1xUnbounded_real_T(0,0);
   result->iir = argInit_1xUnbounded_real_T(8,20);
-  result->last_R =  argInit_1xUnbounded_real_T(1,0);
+  result->last_R =  argInit_1xUnbounded_real_T(0,0);
   result->last_trivial = argInit_boolean_T();
 }
 
