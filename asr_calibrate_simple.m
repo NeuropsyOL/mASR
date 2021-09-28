@@ -1,4 +1,4 @@
-function state = asr_calibrate_simple(X,srate)
+function [M, T, B, A, iirstate] = asr_calibrate_simple(X,srate)
 %
 % asr_calibrate_simple.m--
 %
@@ -32,7 +32,7 @@ mu = zeros(1,C);
 sig = zeros(1,C);
 
 % apply the signal shaping filter and initialize the IIR filter state
-[X,iirstate] = filter(B,A,double(X),[],2)
+[X,iirstate] = filter(B,A,double(X),[],2);
 X = X';
 
 % calculate the sample covariance matrices U (averaged in blocks of blocksize successive samples)
@@ -48,7 +48,7 @@ SCM = (1/S) * (X' * X);
 
 % get the mixing matrix M
 %M = sqrtm(real(reshape(block_geometric_median(U1/blocksize),C,C)));
-M = sqrtm(real(SCM));
+M = real(sqrtm(real(SCM)));
 
 % window length for calculating thresholds
 N = round(window_len*srate);
@@ -89,12 +89,12 @@ for c = C:-1:1
     [mu(c),sig(c)] = fit_eeg_distribution(rms_chan,min_clean_fraction,max_dropout_fraction);
 end
 
-T = diag(mu + cutoff*sig)*V';
+T = real(diag(mu + cutoff*sig)*V');
 
 % initialize the remaining filter state
-state = struct('M',M,'T',T,'B',B,'A',A,'cov',[],'carry',[],'iir',iirstate,'last_R',[],'last_trivial',true);
+%state = struct('M',M,'T',T,'B',B,'A',A,'cov',[],'carry',[],'iir',iirstate,'last_R',[],'last_trivial',true);
 
-sprintf('%f',T(1,1))
+%sprintf('%f',T(1,1))
 
 
 

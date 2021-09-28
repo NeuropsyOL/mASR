@@ -1,0 +1,4 @@
+Section: contrib/science
+Maintainer: Paul Maanen <paul.maanen@uol.de>
+Description: openMHA ASR plugin
+  This plugin provides an implementation of artifact subspace reconstruction for openMHA

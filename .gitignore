@@ -1,3 +1,9 @@
+# Binaries
+asr.so
+asr.dylib
+asr.dll
+benchmark
+
 # Windows default autosave extension
 *.asv
 
@@ -20,6 +26,7 @@ sccprj/
 
 # Matlab code generation folders
 codegen/
+asr.zip
 
 # Matlab Coder project files
 *.prj
@@ -35,3 +42,6 @@ octave-workspace
 
 # OSX filesystem stuff
 .DS_Store
+
+# OSX Debug information
+*.dSYM
