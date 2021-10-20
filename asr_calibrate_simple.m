@@ -56,10 +56,14 @@ N = round(window_len*srate);
 % get the threshold matrix T
 %[V,D] = rasr_nonlinear_eigenspace_simple(M, C);
 [V,D] = eig(M);
-[D, order] = sort(reshape(diag(D),1,C));
-V = V(:,order); 
-X = abs(X*V);
+W=reshape(diag(D),1,C);
+[D, order] = sort(W);
+V = V(:,order);
+V = real(V);
+% Normalize sign of eigenvectors
+V=V*diag(sign(V(1,:)))';
 
+X = abs(X*V);
 % for c = C:-1:1
 %     % compute RMS amplitude for each window...
 %     rms = X(:,c).^2;
