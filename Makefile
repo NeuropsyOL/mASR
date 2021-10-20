@@ -37,8 +37,7 @@ export FULLVERSIONALL
 # FULLVERSIONGCC is FULLVERSIONALL plus the compiler version
 FULLVERSIONGCC=$(FULLVERSIONALL)-gcc$(GCC_VER)
 
-# We need openMP
-#CXXFLAGS+=-fopenmp
+CXXFLAGS+=-Wno-error=unused-function
 
 # Default target
 all: asr$(DYNAMIC_LIB_EXT)
@@ -59,6 +58,9 @@ asr$(DYNAMIC_LIB_EXT): asr.cpp codegen/.directory
 
 benchmark: benchmark.cpp codegen/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
+
+test: test.cpp codegen/.directory
+	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -o test
 
 deb:
 	test -e asr$(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
