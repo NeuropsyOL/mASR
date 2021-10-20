@@ -1,4 +1,5 @@
 #include <random>
+#include "asr.hh"
 #include <chrono>
 #include <openmha/mha_plugin.hh>
 #include "asr_calibrate_simple.h"
@@ -35,53 +36,6 @@ static coder::array<double, 2U> argInit_1xUnbounded_real_T(unsigned M=10,std::op
   return result;
 }
 
-//
-// Arguments    : void
-// Return Type  : coder::array<double, 2U>
-//
-static coder::array<double, 2U> argInit_UnboundedxUnbounded_real_T(unsigned N=20, unsigned M=20000, std::optional<double> val=std::nullopt)
-{
-  coder::array<double, 2U> result;
-
-  // Set the size of the array.
-  // Change this size to the value that the application requires.
-  result.set_size(N,M);
-
-  // Loop over the array to initialize each element.
-  for (int idx0 = 0; idx0 < result.size(0); idx0++) {
-      for (int idx1 = 0; idx1 < result.size(1); idx1++) {
-          // Set the value of the array element.
-          // Change this value to the value that the application requires.
-          if(val)
-              result[idx0 + result.size(0) * idx1] = *val;
-          else
-              result[idx0 + result.size(0) * idx1] = argInit_real_T();
-      }
-  }
-
-  return result;
-}
-//
-// Arguments    : asr_state_t *result
-// Return Type  : void
-//
-static void argInit_asr_state_t(asr_state_t *result)
-{
-  coder::array<double, 2U> b_result_tmp;
-  coder::array<double, 2U> result_tmp;
-
-  // Set the value of each structure field.
-  // Change this value to the value that the application requires.
-  result->M = argInit_UnboundedxUnbounded_real_T(20,20,0);
-  result->T = argInit_UnboundedxUnbounded_real_T(20,20,0);
-  result->B=argInit_1xUnbounded_real_T(9,0);
-  result->A=argInit_1xUnbounded_real_T(9,0);
-  result->cov = argInit_1xUnbounded_real_T(0,0);
-  result->carry = argInit_1xUnbounded_real_T(0,0);
-  result->iir = argInit_1xUnbounded_real_T(8,20);
-  result->last_R =  argInit_1xUnbounded_real_T(0,0);
-  result->last_trivial = argInit_boolean_T();
-}
 
 //
 // Arguments    : void
@@ -92,16 +46,6 @@ static boolean_T argInit_boolean_T()
   return false;
 }
 
-//
-// Arguments    : void
-// Return Type  : double
-//
-static std::random_device rd{};
-static std::mt19937 gen{rd()};
-static std::normal_distribution<> d{0,1};
-static double argInit_real_T()
-{
-    return d(gen);
 }
 
 class asr_t : public MHAPlugin::plugin_t<int> {
