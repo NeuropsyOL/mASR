@@ -77,7 +77,7 @@ for j = 1:length(update_at)
     % update the reconstruction matrix R (reconstruct artifact components using the mixing matrix)
     if ~trivial
         %R_old = real(M*pinv(bsxfun(@times,keep',V'*M))*V');
-        R = real(M*pinv(keep'*V'*M))*V';
+        R = real(M*pinv(keep'.*(V'*M)))*V';
     else
         R = eye(C);
     end
