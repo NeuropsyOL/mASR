@@ -3,6 +3,7 @@ asr.so
 asr.dylib
 asr.dll
 benchmark
+test
 
 # Windows default autosave extension
 *.asv
