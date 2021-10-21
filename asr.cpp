@@ -159,7 +159,7 @@ void asr_cfg_t::process(){
     // Skip copying output data when none is available, but publish AC variable anyway (with old data)
     // because the framework expects us to
     if(fifo_out->get_fill_count()<wave_out->num_frames*wave_out->num_channels){
-        wave_out->insert()
+        wave_out->insert();
         return;
     }
     // Copy output data to AC variable and publish AC variable
@@ -220,8 +220,7 @@ MHAPLUGIN_DOCUMENTATION\
  " a simplified version of the asr reference implementation. The ASR state needs to be calibrated, the calibration file must be a csv file containing"
  " the calibration data, each row representing a channel. The actual EEG data is then received via AC variable. The number of channels must stay the"
  " same during processing, otherwise the processing will be aborted. The input AC variable is expected to always contain the newest samples or now samples,"
- " stale data will cause frames to be double counted. The output of the asr is available in the AC variable named asr_out"
- ")
+ " stale data will cause frames to be double counted. The output of the asr is available in the AC variable named asr_out")
 
 // Local Variables:
 // compile-command: "make"
