@@ -11,23 +11,23 @@ function [outdata,outstate] = asr_process_simple(data,srate,state)
 % at University of Oldenburg.
 % Sarah Blum (sarah.blum@uol.de), 2020-09-01 11:26
 %-------------------------------------------------------------------------
-
-windowlen = 0.1;
+first=true;
+windowlen = 0.5;
 windowlen = max(windowlen,1.5*size(data,1)/srate);
 lookahead = windowlen/2;
-stepsize = 4;
+stepsize = 32;
 
 
 
 [C,S] = size(data);
 maxdims=C;
 N = round(windowlen*srate);
-P = round(lookahead*srate)
+P = round(lookahead*srate);
 [T,M,A,B] = deal(state.T,state.M,state.A,state.B);
 
 % initialize prior filter state by extrapolating available data into the past (if necessary)
 if isempty(state.carry)
-    state.carry = repmat(2*data(:,1),1,P) - data(:,1+mod(((P+1):-1:2)-1,S)); 
+    state.carry = repmat(2*data(:,1),1,P) - data(:,1+mod(((P+1):-1:2)-1,S));
 end
 data = [state.carry data];
 
@@ -68,16 +68,30 @@ for j = 1:length(update_at)
     % ..) data. This should not happen with real EEG data, but with test data, we go the safe
     % way here
     V = real(V); D = real(D);
-    [D,order] = sort(reshape(diag(D),1,C));
+    %[D,order] = sort(reshape(diag(D),1,C));
+    %V = V(:,order);
+    W=reshape(diag(D),1,C);
+    [D, order] = sort(W);
     V = V(:,order);
-    
+    V = real(V);
+    % Normalize sign of eigenvectors
+    V=V*diag(sign(V(1,:)))';
     % determine which components to keep (variance below directional threshold or not admissible for rejection)
     keep = D<sum((T*V).^2) | (1:C)<(C-maxdims);
     trivial = all(keep);
     % update the reconstruction matrix R (reconstruct artifact components using the mixing matrix)
     if ~trivial
-        %R_old = real(M*pinv(bsxfun(@times,keep',V'*M))*V');
-        R = real(M*pinv(keep'.*(V'*M)))*V';
+        % Calculate Tmp1
+        tmp1=keep'.*(V'*M);
+        %fprintf("tmp1: %.4f ",tmp1(1,1));
+        % Calculate Tmp2
+        tmp2=pinv(tmp1);
+        %fprintf("tmp2: %.4f ",tmp2(1,1));
+        % Calculate Tmp3
+        tmp3=M*tmp2;
+        %fprintf("tmp3: %.4f\n",tmp3(1,1));
+        % Calculate R
+        R = real(tmp3)*V';
     else
         R = eye(C);
     end
