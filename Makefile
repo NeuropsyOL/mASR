@@ -62,6 +62,11 @@ benchmark: benchmark.cpp codegen/.directory
 test: test.cpp codegen/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -o test
 
+send_lsl: send_lsl.cpp
+	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -L/opt/homebrew/lib -llsl -o send_lsl
+
+
 deb:
 	test -e asr$(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
 	mhamakedeb asr.csv $(FULLVERSIONGCC)
+
