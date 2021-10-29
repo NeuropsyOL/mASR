@@ -126,6 +126,7 @@ void asr_cfg_t::asr(){
         // Call asr
         asr_process_simple(indata, SamplingRate, &instate, outdata, &outstate);
 
+        instate=outstate;
         // Send output to audio thread
         for(int idx=0;idx<outdata.numel();++idx){
             outdata[idx]=buf_out[idx];
