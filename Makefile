@@ -1,6 +1,7 @@
 # This file is part of the asr project
 
-include /usr/share/openmha/config.mk
+-include /usr/share/openmha/config.mk
+-include /usr/local/share/openmha/config.mk
 
 # Include openmha headers
 INCLUDES=-I/usr/include/openmha
