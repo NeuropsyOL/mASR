@@ -3,6 +3,7 @@ stages:
   - codegen
   - build
   - benchmark
+  - test
   - package
 
 codegen-job:
@@ -67,3 +68,11 @@ benchmark-job:
     paths:
       - "benchmark.log"
       - "benchmark"
+
+test-job:
+  stage: test
+  script:
+    - "unzip -o asr.zip -d codegen"
+    - "touch codegen/.directory"
+    - "make test"
+    - "./test"
