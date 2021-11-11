@@ -51,7 +51,7 @@ asr.zip: asr_calibrate_simple.m asr_process_simple.m make.m
 	matlab -batch 'make'
 
 codegen/.directory: asr.zip
-	unzip -d codegen asr.zip
+	unzip -o asr.zip -d codegen
 	touch codegen/.directory
 
 asr$(DYNAMIC_LIB_EXT): asr.cpp codegen/.directory
