@@ -1,12 +1,12 @@
 #include "asr.hh"
 #include <thread>
 #include <chrono>
-#include <openmha/mha_algo_comm.h>
+#include <openmha/mha_algo_comm.hh>
 #include <openmha/mha_plugin.hh>
 #include <openmha/mha_fifo.h>
 class asr_cfg_t {
 public:
-    asr_cfg_t(algo_comm_t ac,
+    asr_cfg_t(algo_comm_t& ac,
               const std::string& ac_name,
               const std::string& calib_file_name,
               float WindowLength,
@@ -15,7 +15,7 @@ public:
     void process();
     void exit_request();
 private:
-    algo_comm_t ac;
+    algo_comm_t& ac;
     std::string ac_name;
 
     /// Number of channels in the EEG signal
@@ -52,7 +52,7 @@ private:
     std::unique_ptr<MHA_AC::waveform_t> wave_out;
 };
 
-asr_cfg_t::asr_cfg_t(algo_comm_t ac, const std::string& ac_name, const std::string& calib_file_name, float WindowLength, float SamplingRate):
+asr_cfg_t::asr_cfg_t(algo_comm_t& ac, const std::string& ac_name, const std::string& calib_file_name, float WindowLength, float SamplingRate):
     ac(ac),
     ac_name(ac_name),
     WindowLength(WindowLength),
@@ -148,7 +148,7 @@ void asr_cfg_t::exit_request(){
 void asr_cfg_t::process(){
 
     // Get input signal, check dimensions
-    mha_wave_t signal_in=MHA_AC::get_var_waveform(ac,ac_name.c_str());
+    mha_wave_t signal_in=MHA_AC::get_var_waveform(ac,ac_name);
     if(NumChannels!=signal_in.num_channels)
         throw MHA_Error(__FILE__,__LINE__,
                         "Number of channels in EEG signal does not fit calibration."
@@ -170,7 +170,7 @@ void asr_cfg_t::process(){
 
 class asr_t : public MHAPlugin::plugin_t<asr_cfg_t> {
 public:
-    asr_t(algo_comm_t iac, const std::string & configured_name)
+    asr_t(algo_comm_t& iac, const std::string & configured_name)
         : MHAPlugin::plugin_t<asr_cfg_t>("",iac)
     {(void)configured_name;/* ignore 2nd parameter */
         insert_member(SamplingRate);
