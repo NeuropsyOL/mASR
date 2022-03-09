@@ -71,6 +71,8 @@ benchmark-job:
 
 test-job:
   stage: test
+  tags:
+    - pi
   script:
     - "unzip -o asr.zip -d codegen"
     - "touch codegen/.directory"
