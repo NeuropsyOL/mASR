@@ -1,0 +1,3 @@
+[submodule "mASR-testdata"]
+	path = mASR-testdata
+	url = ssh://git@github.com/NeuropsyOL/mASR-testdata

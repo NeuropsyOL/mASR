@@ -1,5 +1,5 @@
 #include <benchmark/benchmark.h>
-#include "rapidcsv.h"
+#include "rapidcsv/rapidcsv.h"
 #include "asr.hh"
 #include <iostream>
 #include <array>
