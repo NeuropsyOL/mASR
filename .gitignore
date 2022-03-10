@@ -46,3 +46,6 @@ octave-workspace
 
 # OSX Debug information
 *.dSYM
+
+# make artifacts
+.directory
