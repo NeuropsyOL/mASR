@@ -7,7 +7,6 @@
 #include <optional>
 #include <string>
 using namespace std::string_literals;
-std::array infiles{"sme_1_1.xdf_filt.csv"s, "sme_1_5.xdf_filt.csv"s};
 
 void set_array(const coder::array<double,2U>& in, coder::array<double,2U>& out,int from, int to){
   out.set_size(in.size(0),to-from+1);
@@ -19,7 +18,7 @@ void set_array(const coder::array<double,2U>& in, coder::array<double,2U>& out,i
 
 static void BM_asr_calibrate_simple(benchmark::State& state) {
 
-  auto X=to_array(rapidcsv::Document("calib_csv/X1.csv",rapidcsv::LabelParams(-1,-1)));
+  auto X=to_array(rapidcsv::Document("mASR-testdata/calib.csv",rapidcsv::LabelParams(-1,-1)));
   auto M = argInit_UnboundedxUnbounded_real_T(24,24,0);
   auto T = argInit_UnboundedxUnbounded_real_T(24,24,0);
   double B[9];
@@ -33,7 +32,7 @@ static void BM_asr_calibrate_simple(benchmark::State& state) {
 }
 
 static void BM_asr_process_simple_real(benchmark::State& state) {
-  auto X=to_array(rapidcsv::Document("calib_csv/"+infiles[0],rapidcsv::LabelParams(-1,-1)));
+  auto X=to_array(rapidcsv::Document("mASR-testdata/calib.csv",rapidcsv::LabelParams(-1,-1)));
   auto M = argInit_UnboundedxUnbounded_real_T(24,24,0);
   auto T = argInit_UnboundedxUnbounded_real_T(24,24,0);
   double B[9];
@@ -41,7 +40,7 @@ static void BM_asr_process_simple_real(benchmark::State& state) {
   auto iirstate = argInit_UnboundedxUnbounded_real_T(8,24);
   asr_state_t instate;
   argInit_asr_state_t(&instate);
-  asr_calibrate_simple(X, 100, instate.M,instate.T,B,A,instate.iir);
+  asr_calibrate_simple(X, 500, instate.M,instate.T,B,A,instate.iir);
   for(int i=0;i<9;i++){
     instate.A[i]=A[i];
     instate.B[i]=B[i];
@@ -52,11 +51,11 @@ static void BM_asr_process_simple_real(benchmark::State& state) {
   coder::array<double, 2U> outdata;
   outdata=argInit_UnboundedxUnbounded_real_T(X.size(0),50);
   auto tmp_state=instate;
-  indata=to_array(rapidcsv::Document("calib_csv/"+infiles[0],rapidcsv::LabelParams(-1,-1)));
+  indata=to_array(rapidcsv::Document("mASR-testdata/proc.csv",rapidcsv::LabelParams(-1,-1)));
   auto use_data=argInit_UnboundedxUnbounded_real_T(indata.size(0),50);
   for(auto _ :state){
     set_array(indata,use_data,0,state.range(0)-1);
-    asr_process_simple(use_data, 100, &tmp_state, outdata, &outstate);
+    asr_process_simple(use_data, 500, &tmp_state, outdata, &outstate);
     outdata=argInit_UnboundedxUnbounded_real_T(X.size(0),50);
   }
 }
@@ -84,7 +83,7 @@ static void BM_asr_process_simple_random(benchmark::State& state) {
     // code appends to indata on every call
     indata=argInit_UnboundedxUnbounded_real_T(24,state.range(0));
     outdata=argInit_UnboundedxUnbounded_real_T(24,state.range(0),0);
-    asr_process_simple(indata, 100, &instate, outdata, &outstate);
+    asr_process_simple(indata, 500, &instate, outdata, &outstate);
   }
 }
 

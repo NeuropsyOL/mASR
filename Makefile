@@ -43,6 +43,13 @@ CXXFLAGS+=-Wno-error=unused-function
 # Default target
 all: asr$(DYNAMIC_LIB_EXT)
 
+# Test data
+mASR-testdata/.directory:
+	@if git submodule status | egrep -q '^[-]|^[+]' ; then \
+            git submodule update --init; \
+  fi
+	@touch mASR-testdata/.directory
+
 # Convenience target: Remove compiled products
 clean:
 	rm -rf codegen asr$(DYNAMIC_LIB_EXT)
@@ -57,13 +64,10 @@ codegen/.directory: asr.zip
 asr$(DYNAMIC_LIB_EXT): asr.cpp codegen/.directory
 	$(CXX) -shared -o asr$(DYNAMIC_LIB_EXT) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen $(INCLUDES) $(LIBS) $< $(SOURCES)
 
-benchmark: benchmark.cpp codegen/.directory
+benchmark: benchmark.cpp codegen/.directory mASR-testdata/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lbenchmark -lpthread -o benchmark
 
-test: test.cpp codegen/.directory
-	@if git submodule status | egrep -q '^[-]|^[+]' ; then \
-            git submodule update --init; \
-        fi
+test: test.cpp codegen/.directory mASR-testdata/.directory
 	$(CXX) $< $(SOURCES) $(CXXFLAGS) -Wno-deprecated-copy -Icodegen -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread -o test
 
 deb:
