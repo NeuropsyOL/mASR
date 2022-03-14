@@ -38,7 +38,11 @@ export FULLVERSIONALL
 # FULLVERSIONGCC is FULLVERSIONALL plus the compiler version
 FULLVERSIONGCC=$(FULLVERSIONALL)-gcc$(GCC_VER)
 
-CXXFLAGS+=-Wno-error=unused-function
+CXXFLAGS+=-Wno-error=unused-function -fno-unsafe-math-optimizations
+
+ifeq "$(PLATFORM)" "Darwin"
+CXXFLAGS+=-Wno-error=unsupported-floating-point-opt
+endif
 
 # Default target
 all: asr$(DYNAMIC_LIB_EXT)
