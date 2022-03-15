@@ -1,7 +1,6 @@
 
 stages:
   - codegen
-  - build
   - benchmark
   - test
   - package
@@ -16,26 +15,10 @@ codegen-job:
     paths:
       - asr.zip
 
-build-job:
-  tags:
-    - pi
-  stage: build
-  dependencies:
-    - codegen-job
-  script:
-    - "unzip -o -d codegen asr.zip"
-    - "touch codegen/.directory" 
-    - "make"
-  artifacts:
-    paths:
-      - asr.so
-
 package-x86-job:
   tags:
     - x86
   stage: package
-  dependencies:
-    - build-job
   script:
     - "make deb"
   artifacts:
@@ -46,17 +29,15 @@ package-arm-job:
   tags:
     - arm
   stage: package
-  dependencies:
-    - build-job
   script:
     - "make deb"
   artifacts:
     paths:
       - "asr_*_*.deb"
 
-benchmark-job:
+benchmark-arm-job:
   tags:
-    - pi
+    - arm
   stage: benchmark
   script:
     - "unzip -o asr.zip -d codegen"
@@ -69,7 +50,34 @@ benchmark-job:
       - "benchmark.log"
       - "benchmark"
 
-test-job:
+benchmark-x86-job:
+  tags:
+    - x86
+  stage: benchmark
+  script:
+    - "unzip -o asr.zip -d codegen"
+    - "touch codegen/.directory"
+    - "make benchmark"
+    - "ulimit -c unlimited"
+    - "./benchmark --benchmark_out_format=console --benchmark_out=benchmark.log"
+  artifacts:
+    paths:
+      - "benchmark.log"
+      - "benchmark"
+
+test-arm-job:
+  tags:
+    - arm
+  stage: test
+  script:
+    - "unzip -o asr.zip -d codegen"
+    - "touch codegen/.directory"
+    - "make test"
+    - "./test"
+
+test-x86-job:
+  tags:
+    - x86
   stage: test
   script:
     - "unzip -o asr.zip -d codegen"
