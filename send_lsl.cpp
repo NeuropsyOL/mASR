@@ -1,5 +1,5 @@
 #include "lsl_cpp.h"
-#include "rapidcsv.h"
+#include "rapidcsv/rapidcsv.h"
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
 
@@ -13,15 +13,13 @@
 int main(int argc, char* argv[]) {
 
   // Read data from file
-  std::string filename=argc > 2 ? argv[2] : "calib_csv/sme_1_1.xdf_filt.csv";
-std::cout<<filename<<"\n";
+  std::string filename=argc > 2 ? argv[2] : "mASR-testdata/calib.csv";
   auto data=rapidcsv::Document(filename,rapidcsv::LabelParams(-1,-1));
 
   // create a new stream_info and open an outlet with it - Take name from cmd line or use
   // "SimpleStream" as default
   lsl::stream_info info(argc > 1 ? argv[1] : "SimpleStream", "EEG", data.GetRowCount());
   lsl::stream_outlet outlet(info);
-
   // Wait until there is a consumer before continuing - timeout is 999s
   outlet.wait_for_consumers(999);
 
