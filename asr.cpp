@@ -189,9 +189,21 @@ public:
         asr_terminate();
     }
 
+    void update(){
+        if (is_prepared()){
+          auto c = new asr_cfg_t(ac, VarName.data, CalibrationFileName.data,
+                                 WindowLength.data, SamplingRate.data);
+          push_config(c);
+        }
+    }
+
     void prepare(mhaconfig_t & )
     {
-        push_config(new asr_cfg_t(ac,VarName.data,CalibrationFileName.data,WindowLength.data,SamplingRate.data));
+        update();
+        SamplingRate.setlock(true);
+        WindowLength.setlock(true);
+        VarName.setlock(true);
+        CalibrationFileName.setlock(true);
     }
 
     mha_wave_t * process(mha_wave_t * signal)
