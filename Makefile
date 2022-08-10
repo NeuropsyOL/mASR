@@ -78,3 +78,5 @@ deb:
 	test -e asr$(DYNAMIC_LIB_EXT) || $(MAKE) asr$(DYNAMIC_LIB_EXT)
 	mhamakedeb asr.csv $(FULLVERSIONGCC)
 
+send_lsl: send_lsl.cpp
+	$(CXX) -o $@ $< $(CXXFLAGS) $(LDFLAGS) -llsl
