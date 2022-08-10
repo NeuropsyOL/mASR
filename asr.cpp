@@ -93,7 +93,8 @@ asr_cfg_t::asr_cfg_t(algo_comm_t& ac, const std::string& ac_name, const std::str
     fifo_out=std::make_unique<mha_fifo_lf_t<float>>(SamplingRate*WindowLength*NumChannels*20000);
     buf=std::make_unique<float[]>(SamplingRate*WindowLength*NumChannels);
     buf_out=std::make_unique<float[]>(SamplingRate*WindowLength*NumChannels);
-    wave_out=std::make_unique<MHA_AC::waveform_t>(MHA_AC::waveform_t(ac,"asr_out",SamplingRate*WindowLength,NumChannels,false));
+    wave_out=std::make_unique<MHA_AC::waveform_t>(MHA_AC::waveform_t(ac,"asr_out",SamplingRate*WindowLength,NumChannels,true));
+    wave_out->insert();
     // Start asr thread
     asr_thread=std::thread(&asr_cfg_t::asr, this);
 }
@@ -187,6 +188,10 @@ public:
         if(latest_cfg)
             latest_cfg->exit_request();
         asr_terminate();
+        SamplingRate.setlock(false);
+        WindowLength.setlock(false);
+        VarName.setlock(false);
+        CalibrationFileName.setlock(false);
     }
 
     void update(){
