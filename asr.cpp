@@ -130,7 +130,7 @@ void asr_cfg_t::asr(){
         instate=outstate;
         // Send output to audio thread
         for(int idx=0;idx<outdata.numel();++idx){
-            outdata[idx]=buf_out[idx];
+            buf_out[idx]=outdata[idx];
         }
         fifo_out->write(buf_out.get(),outdata.numel());
     }
