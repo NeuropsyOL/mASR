@@ -79,4 +79,4 @@ deb:
 	mhamakedeb asr.csv $(FULLVERSIONGCC)
 
 send_lsl: send_lsl.cpp
-	$(CXX) -o $@ $< $(CXXFLAGS) $(LDFLAGS) -llsl
+	$(CXX) -o $@ $< $(CXXFLAGS) -Wno-sign-compare $(LDFLAGS) -llsl
