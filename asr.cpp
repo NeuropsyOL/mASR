@@ -159,11 +159,16 @@ void asr_cfg_t::process(){
     fifo_in->write(signal_in.buf,signal_in.num_channels*signal_in.num_frames);
 
     // Skip copying output data when none is available, but publish AC variable anyway (with old data)
-    // because the framework expects us to
+    // because the framework expects us to. Set num_frames to zero to signal downstream plugins that no
+    // new data is available. Afterwards reset the number of frames in wave_out
     if(fifo_out->get_fill_count()<wave_out->num_frames*wave_out->num_channels){
+        auto tmp_num_frames=wave_out->num_frames;
+        wave_out->num_frames=0;
         wave_out->insert();
+        wave_out->num_frames=tmp_num_frames;
         return;
     }
+    else
     // Copy output data to AC variable and publish AC variable
     fifo_out->read(wave_out->buf,wave_out->num_frames*wave_out->num_channels);
     wave_out->insert();
