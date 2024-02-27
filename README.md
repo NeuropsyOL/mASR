@@ -3,6 +3,8 @@ bibliography:
 - paper.bib
 ---
 
+# Introduction
+
 Electroencephalography (EEG) is a non-invasive method for the recording
 of brain-electrical activity. EEG signals can be recorded from several
 scalp sites concurrently with small, portable devices. Therefore it is a
@@ -41,7 +43,7 @@ has been shown to perform well with movement artifacts and eye blinks
 [@blum2019; @jacobsen2020; @ladouce2021; @dehais2020; @plechawska2018; @nathan2016; @nordin2018; @dehais2020],
 artifact classes which are especially important for mobile EEG.\
 
-#### The artifact subspace reconstruction algorithm {#the-artifact-subspace-reconstruction-algorithm .unnumbered}
+# The artifact subspace reconstruction algorithm
 
 ASR is a statistical artifact correction method
 [@mullen2015; @blum2019; @chang2018; @pion2018]. It detects artifacts
@@ -94,12 +96,11 @@ hardware, the interpretation of neural data in different contexts is
 possible. Furthermore, we hope that this report provides a guideline for
 others looking to translate Matlab code into compiled languages for
 usage on limited hardware.\
+
 Our target hardware is the Portable Hearing Laboratory (PHL)
 [@pavlovic2018; @phl-webpage], a mobile integrated setup for
 audiological research based on the [Beaglebone Black
-Wireless]{.smallcaps} single-board computer (see tab
-[1](#tab:phl-specs){reference-type="ref" reference="tab:phl-specs"} for
-hardware specs) and the open-source audio interface
+Wireless]{.smallcaps} single-board computer and the open-source audio interface
 [Cape4All]{.smallcaps}[@herzke2018]. It includes a battery and a set of
 binaural behind-the-ear (BTE) hearing aids, and runs a software platform
 for various audio signal processing algorithms, openMHA [@kayser2022],
@@ -113,18 +114,7 @@ information [@dasenbrock2021; @aroudi2020; @noymai2019]. Its established
 user base together with the urgent need for EEG artifact reduction makes
 the PHL an attractive target platform for mASR.\
 
-::: {#tab:phl-specs}
-  CPU                                 Octavo Systems OSD3358 1GHz ARM® Cortex-A8
-  -------------- ---------------------------------------------------------------
-  RAM                                                             512MB DDR3 RAM
-  Size             ca $8.5\,\mathrm{cm}\times6\,\mathrm{cm\times3\,\mathrm{cm}}$
-  Weight                                                       $135\,\mathrm{g}$
-  Battery life                         $4-6+\,\mathrm{hours}$, depending on load
-
-  : PHL specs
-:::
-
-#### openMHA in a nutshell {#openmha-in-a-nutshell .unnumbered}
+# openMHA in a nutshell
 
 Since openMHA is described in detail elsewhere
 [@openmha-doc; @kayser2022] we only introduce some concepts especially
@@ -144,7 +134,7 @@ are used to configure plugins. openMHA provides a mechanism to change
 configuration variables during audio processing in a real-time safe
 manner.
 
-# Implementation and architecture {#implementation-and-architecture .unnumbered}
+# Implementation and architecture
 
 In order to reduce development time the Matlab Coder was used to
 automatically translate a simplified version of the reference
@@ -155,21 +145,7 @@ original implementation needed to be made. They are described later in
 the simplification, the translation process was automated by using
 Makefiles, thereby shortening the time it takes to integrate
 improvements in the reference implementation and reducing the potential
-for human error. Figure [1](#fig:pipeline){reference-type="ref"
-reference="fig:pipeline"} shows a sketch of the build pipeline.
-
-<figure id="fig:pipeline">
-<div class="centering">
-<embed src="img/pipeline.eps" />
-</div>
-<figcaption>The mASR build pipeline. Ochre stands for Matlab code, green
-for C++ Code and red for compiled code<span id="fig:pipeline"
-label="fig:pipeline"></span>. PHL image taken from <span
-class="citation" data-cites="mha-hardware-webpage"></span>. For PHL
-specs see table <a href="#tab:phl-specs" data-reference-type="ref"
-data-reference="tab:phl-specs">1</a>. The PHL is available from
-BatAndCat Labs, Palo Alto, USA.</figcaption>
-</figure>
+for human error.
 
 #### mASR in the openMHA framework {#masr-in-the-openmha-framework .unnumbered}
 
@@ -246,7 +222,7 @@ CalibrationFileName
 
 :   file name of the calibration file.
 
-#### Translation of ASR to Matlab Coder-compatible source base {#translation-of-asr-to-matlab-coder-compatible-source-base .unnumbered}
+#### Translation of ASR to Matlab Coder-compatible source base
 
 In order to be able to generate C/C++ code from the ASR Matlab codebase,
 some steps with regards to compatibility to the Matlab code generation
@@ -266,7 +242,7 @@ initialized before their first usage in both `asr_calibrate.m` and
 `asr_process.m`. Subsequently tests were performed to ensure the
 equivalency of the adapted ASR code to the original code base.
 
-# Quality control {#quality-control .unnumbered}
+# Quality control
 
 In order to ensure that mASR works correctly, we processed data sets
 using the reference implementation and our implementation and then
