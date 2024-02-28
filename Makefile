@@ -1,12 +1,13 @@
 # This file is part of the asr project
 
+# openMHA compiler configuration - you may need to change this if you use a self-compiled openMHA
 -include /usr/share/openmha/config.mk
 -include /usr/local/share/openmha/config.mk
 
-# Include openmha headers
+# Include openmha headers - adapt directory if needed
 INCLUDES=-I/usr/include/openmha
 
-# Link against libopenmha
+# Link against libopenmha - change this to your libopenmha location
 LIBS=-L/usr/local/lib/openmha -lopenmha
 
 # Sources
